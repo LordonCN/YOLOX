@@ -13,6 +13,7 @@ import torch
 
 from yolox.data.data_augment import ValTransform
 from yolox.data.datasets import COCO_CLASSES
+from yolox.data.datasets import VOC_CLASSES
 from yolox.exp import get_exp
 from yolox.utils import fuse_model, get_model_info, postprocess, vis
 
@@ -102,7 +103,7 @@ class Predictor(object):
         self,
         model,
         exp,
-        cls_names=COCO_CLASSES,
+        cls_names=VOC_CLASSES,
         trt_file=None,
         decoder=None,
         device="cpu",
@@ -146,6 +147,10 @@ class Predictor(object):
         img_info["ratio"] = ratio
 
         img, _ = self.preproc(img, None, self.test_size)
+        
+        # # debug for cpp inference
+        # img.tofile("apollo_image.bin") 
+
         img = torch.from_numpy(img).unsqueeze(0)
         img = img.float()
         if self.device == "gpu":
@@ -155,7 +160,36 @@ class Predictor(object):
 
         with torch.no_grad():
             t0 = time.time()
-            outputs = self.model(img)
+            outputs = self.model(img)[0]
+            # ------------------export torch model----------------------
+            # mod = torch.jit.trace(self.model, img)
+            # mod.save("./yolox_kitti_temp.pth")
+            # logger.info("generated torchscript model named {}".format("./yolox_kitti_temp.pth"))
+            # outputs = mod(img)[0]
+            
+            # print(" export libtorch model and show the result")
+            # ----------------------------------------
+            
+            # ------------------export onnx model----------------------
+            # torch.onnx._export(
+            #     self.model,
+            #     img,
+            #     "./yolox_kitti_temp.onnx",
+            #     input_names=["data"],
+            #     output_names=["predict", "feature"],
+            #     # dynamic_axes={args.input: {0: 'batch'},
+            #     #               args.output: {0: 'batch'}} if args.dynamic else None,
+            #     opset_version=9,
+            # )
+            # logger.info("generated onnx model named {}".format("./yolox_kitti_temp.onnx"))
+
+            # import numpy
+            # import onnxruntime as ort
+            # session = ort.InferenceSession("./yolox_kitti_temp.onnx", providers=['CUDAExecutionProvider'])
+            # dummy_input = img.cpu().numpy().astype(numpy.float32)
+            # onnx_outputs = session.run(None,{'data':dummy_input})[0]
+            # ----------------------------------------
+
             if self.decoder is not None:
                 outputs = self.decoder(outputs, dtype=outputs.type())
             outputs = postprocess(
@@ -303,7 +337,7 @@ def main(exp, args):
         decoder = None
 
     predictor = Predictor(
-        model, exp, COCO_CLASSES, trt_file, decoder,
+        model, exp, VOC_CLASSES, trt_file, decoder,
         args.device, args.fp16, args.legacy,
     )
     current_time = time.localtime()

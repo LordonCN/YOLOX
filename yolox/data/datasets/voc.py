@@ -123,11 +123,12 @@ class VOCDetection(CacheDataset):
         ]
         self.class_ids = list(range(len(VOC_CLASSES)))
         self.ids = list()
-        for (year, name) in image_sets:
-            self._year = year
-            rootpath = os.path.join(self.root, "VOC" + year)
+        for name in image_sets:
+            self._year = str(2023)
+            # rootpath = os.path.join(self.root, "VOC" + year)
+            rootpath = self.root
             for line in open(
-                os.path.join(rootpath, "ImageSets", "Main", name + ".txt")
+                os.path.join(rootpath, "ImageSets", name + ".txt")
             ):
                 self.ids.append((rootpath, line.strip()))
         self.num_imgs = len(self.ids)
@@ -276,10 +277,11 @@ class VOCDetection(CacheDataset):
                         )
 
     def _do_python_eval(self, output_dir="output", iou=0.5):
-        rootpath = os.path.join(self.root, "VOC" + self._year)
-        name = self.image_set[0][1]
+        # rootpath = os.path.join(self.root, "VOC" + self._year)
+        rootpath = self.root
+        name = self.image_set[0]
         annopath = os.path.join(rootpath, "Annotations", "{:s}.xml")
-        imagesetfile = os.path.join(rootpath, "ImageSets", "Main", name + ".txt")
+        imagesetfile = os.path.join(rootpath, "ImageSets", name + ".txt")
         cachedir = os.path.join(
             self.root, "annotations_cache", "VOC" + self._year, name
         )
@@ -287,7 +289,7 @@ class VOCDetection(CacheDataset):
             os.makedirs(cachedir)
         aps = []
         # The PASCAL VOC metric changed in 2010
-        use_07_metric = True if int(self._year) < 2010 else False
+        use_07_metric = True
         print("Eval IoU : {:.2f}".format(iou))
         if output_dir is not None and not os.path.isdir(output_dir):
             os.mkdir(output_dir)

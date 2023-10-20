@@ -14,7 +14,7 @@ from yolox.exp import get_exp
 def make_parser():
     parser = argparse.ArgumentParser("YOLOX torchscript deploy")
     parser.add_argument(
-        "--output-name", type=str, default="yolox.torchscript.pt", help="output name of models"
+        "--output-name", type=str, default="yolox.pth", help="output name of models"
     )
     parser.add_argument("--batch-size", type=int, default=1, help="batch size")
     parser.add_argument(
@@ -69,12 +69,14 @@ def main():
     model.head.decode_in_inference = args.decode_in_inference
 
     logger.info("loading checkpoint done.")
-    dummy_input = torch.randn(args.batch_size, 3, exp.test_size[0], exp.test_size[1])
+    dummy_input = torch.randn(1, 3, exp.test_size[0], exp.test_size[1])
+    output = model(dummy_input)[0]
 
     mod = torch.jit.trace(model, dummy_input)
     mod.save(args.output_name)
     logger.info("generated torchscript model named {}".format(args.output_name))
 
+    output = mod(dummy_input)[0]
 
 if __name__ == "__main__":
     main()

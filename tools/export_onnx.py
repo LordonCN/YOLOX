@@ -86,19 +86,30 @@ def main():
     model.head.decode_in_inference = args.decode_in_inference
 
     logger.info("loading checkpoint done.")
-    dummy_input = torch.randn(args.batch_size, 3, exp.test_size[0], exp.test_size[1])
-
+    dummy_input = torch.randn(1, 3, exp.test_size[0], exp.test_size[1])
+    
+    output = model(dummy_input)[0]
+    print(output[0][0][5])
+    
     torch.onnx._export(
         model,
         dummy_input,
         args.output_name,
         input_names=[args.input],
-        output_names=[args.output],
-        dynamic_axes={args.input: {0: 'batch'},
-                      args.output: {0: 'batch'}} if args.dynamic else None,
+        output_names=["predict", "feature"],
+        # dynamic_axes={args.input: {0: 'batch'},
+        #               args.output: {0: 'batch'}} if args.dynamic else None,
         opset_version=args.opset,
     )
     logger.info("generated onnx model named {}".format(args.output_name))
+
+    import numpy
+    import onnxruntime as ort
+    session = ort.InferenceSession(args.output_name, providers=['CUDAExecutionProvider'])
+    dummy_input = dummy_input.cpu().numpy().astype(numpy.float32)
+    new_outputs = session.run(None,{'data':dummy_input})[0]
+    print(new_outputs[0][0][5])
+
 
     if not args.no_onnxsim:
         import onnx

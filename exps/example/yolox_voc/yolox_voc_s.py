@@ -8,7 +8,7 @@ from yolox.exp import Exp as MyExp
 class Exp(MyExp):
     def __init__(self):
         super(Exp, self).__init__()
-        self.num_classes = 20
+        self.num_classes = 8
         self.depth = 0.33
         self.width = 0.50
         self.warmup_epochs = 1
@@ -16,24 +16,24 @@ class Exp(MyExp):
         # ---------- transform config ------------ #
         self.mosaic_prob = 1.0
         self.mixup_prob = 1.0
-        self.hsv_prob = 1.0
         self.flip_prob = 0.5
+        self.hsv_prob = 1.0
 
         self.exp_name = os.path.split(os.path.realpath(__file__))[1].split(".")[0]
 
-    def get_dataset(self, cache: bool, cache_type: str = "ram"):
+    def get_dataset(self, cache: bool, cache_type: str = "disk"):
         from yolox.data import VOCDetection, TrainTransform
 
         return VOCDetection(
-            data_dir=os.path.join(get_yolox_datadir(), "VOCdevkit"),
-            image_sets=[('2007', 'trainval'), ('2012', 'trainval')],
+            data_dir=os.path.join(get_yolox_datadir(), "L4-100W"),
+            image_sets=[('train')],
             img_size=self.input_size,
             preproc=TrainTransform(
                 max_labels=50,
                 flip_prob=self.flip_prob,
                 hsv_prob=self.hsv_prob),
-            cache=cache,
-            cache_type=cache_type,
+            # cache=True,
+            # cache_type="disk",
         )
 
     def get_eval_dataset(self, **kwargs):
@@ -41,8 +41,8 @@ class Exp(MyExp):
         legacy = kwargs.get("legacy", False)
 
         return VOCDetection(
-            data_dir=os.path.join(get_yolox_datadir(), "VOCdevkit"),
-            image_sets=[('2007', 'test')],
+            data_dir=os.path.join(get_yolox_datadir(), "L4-100W"),
+            image_sets=[('test')],
             img_size=self.test_size,
             preproc=ValTransform(legacy=legacy),
         )

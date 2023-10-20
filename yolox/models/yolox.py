@@ -27,7 +27,7 @@ class YOLOX(nn.Module):
 
     def forward(self, x, targets=None):
         # fpn output content features of [dark3, dark4, dark5]
-        fpn_outs = self.backbone(x)
+        fpn_outs, apollo_feature = self.backbone(x)
 
         if self.training:
             assert targets is not None
@@ -42,10 +42,11 @@ class YOLOX(nn.Module):
                 "cls_loss": cls_loss,
                 "num_fg": num_fg,
             }
+            return outputs
         else:
             outputs = self.head(fpn_outs)
-
-        return outputs
+        # add apollo tracking feature 
+        return [outputs, apollo_feature]
 
     def visualize(self, x, targets, save_prefix="assign_vis_"):
         fpn_outs = self.backbone(x)

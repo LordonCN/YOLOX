@@ -88,7 +88,7 @@ class VOCEvaluator:
                 if is_time_record:
                     start = time.time()
 
-                outputs = model(imgs)
+                outputs = model(imgs)[0]
                 if decoder is not None:
                     outputs = decoder(outputs, dtype=outputs.type())
 

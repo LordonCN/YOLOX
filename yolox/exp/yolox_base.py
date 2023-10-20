@@ -19,7 +19,7 @@ class Exp(BaseExp):
 
         # ---------------- model config ---------------- #
         # detect classes number of model
-        self.num_classes = 80
+        self.num_classes = 8
         # factor of model depth
         self.depth = 1.00
         # factor of model width
@@ -179,7 +179,7 @@ class Exp(BaseExp):
                 assert cache_img is None, \
                     "cache_img must be None if you didn't create self.dataset before launch"
                 self.dataset = self.get_dataset(cache=False, cache_type=cache_img)
-
+        
         self.dataset = MosaicDetection(
             dataset=self.dataset,
             mosaic=not no_aug,
