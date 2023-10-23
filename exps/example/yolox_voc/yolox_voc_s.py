@@ -25,7 +25,7 @@ class Exp(MyExp):
         from yolox.data import VOCDetection, TrainTransform
 
         return VOCDetection(
-            data_dir=os.path.join(get_yolox_datadir(), "L4-100W"),
+            data_dir=os.path.join(get_yolox_datadir(), "CUSTOMER"),
             image_sets=[('train')],
             img_size=self.input_size,
             preproc=TrainTransform(
@@ -41,7 +41,7 @@ class Exp(MyExp):
         legacy = kwargs.get("legacy", False)
 
         return VOCDetection(
-            data_dir=os.path.join(get_yolox_datadir(), "L4-100W"),
+            data_dir=os.path.join(get_yolox_datadir(), "CUSTOMER"),
             image_sets=[('test')],
             img_size=self.test_size,
             preproc=ValTransform(legacy=legacy),
