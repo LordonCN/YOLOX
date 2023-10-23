@@ -66,11 +66,10 @@ cd <YOLOX_HOME>
 ln -s /path/to/your/KITTI ./datasets/KITTI
 ```
 
-TODO(test):  Step2. provide tools for voc trans
+Step2. Tools for kitti type datasets
 We provide tools for KITTI type datasets which can help to trans it to VOC type : [readme](datasets/README.md)
 
-TODO(test):  Step3. change kitti configs
-
+Step3. change kitti configs
 - class number: 8 to 6
 1. change [voc_classes.py](yolox/data/datasets/voc_classes.py) to KITTI class.
 2. modify [yolox_voc_s.py](exps/example/yolox_voc/yolox_voc_s.py) todo items.
@@ -82,17 +81,20 @@ self._imgpath = os.path.join("%s", "JPEGImages", "%s.jpg") # to png
 Step4. Reproduce our results on KITTI by specifying -n:
 
 ```shell
-python3 tools/train.py -f exps/example/yolox_voc/yolox_voc_s.py -d 0 -b 16 
+python3 tools/train.py -f exps/example/yolox_voc/yolox_voc_s.py -d 0 -b 16
 ```
 or resume
 ```shell
-python3 tools/train.py -f exps/example/yolox_voc/yolox_voc_s.py -d 0 -b 16 --resume /path/to/your/best_kitti_ckpt.pth
+python3 tools/train.py -f exps/example/yolox_voc/yolox_voc_s.py -d 0 -b 16 -c /path/to/your/latest_ckpt.pth --resume
 ```
 
 * -d: number of gpu devices
 * -b: total batch size, the recommended number for -b is num-gpu * 8
 * --fp16: mixed precision training
 * --cache: caching imgs into RAM to accelarate training, which need large system RAM.
+* -c: checkpoint file path
+
+--------------------
 
 
 When using -f, the above commands are equivalent to:

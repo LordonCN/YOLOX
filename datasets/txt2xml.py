@@ -83,7 +83,7 @@ def mkdir(path):
     if not folder:
         os.makedirs(path)
         print("---  creating new folder...  ---")
-        print("---  finished  ---")
+        print("---  finished creating ---")
     else:
         print("---  pass to create new folder ---")
 
@@ -109,7 +109,8 @@ if __name__ == '__main__':
             i += 1
             print("\r", end="|")
             percent = i/len(filenames)*100
-            print("processing: {} %: ".format(percent, '.2f'), end="|")
+            print("processing: {:.4} % ".format(percent, '.2f'), end="")
             sys.stdout.flush()
             generate_xml(name, split_lines, img_size, class_ind)
-print('all txts has converted into xmls')
+            
+print('\n' + 'all txts have converted into xmls')

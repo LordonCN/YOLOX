@@ -9,6 +9,9 @@ from loguru import logger
 
 import cv2
 
+import sys
+sys.path.append(sys.path[0].split('/tools')[0])
+
 import torch
 
 from yolox.data.data_augment import ValTransform

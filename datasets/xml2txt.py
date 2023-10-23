@@ -57,6 +57,7 @@ def dir_xml_to_txt(path):
         print("\r", end="|")
         print("processing: {} files: ".format(i), end="|")
         sys.stdout.flush()
+    print('\n' + "Done")
 
 
 def mkdir(path):

@@ -13,7 +13,7 @@ total_png = []
 for png in temp_png:
     if png.endswith(".txt"):
         id = str(int(png.split('.')[0])).zfill(6)
-        total_png.append(id + '.jpg')
+        total_png.append(id + '.png')
 
 print("---  iter for image finished ---")
 
@@ -43,8 +43,8 @@ for i in range(num2):
 
 def mkdir(path):
     folder = os.path.exists(path)
-    if not folder:                   # 判断是否存在文件夹如果不存在则创建为文件夹
-        os.makedirs(path)            # makedirs 创建文件时如果路径不存在会创建这个路径
+    if not folder:
+        os.makedirs(path)
         print("---  creating new folder...  ---")
         print("---  finished  ---")
     else:
@@ -58,17 +58,17 @@ fval = open(os.path.join(saveBasePath, 'val.txt'), 'w')
 ftest = open(os.path.join(saveBasePath, 'test.txt'), 'w')
 
 for i in train:
-    name = './images/' + total_png[i][:-4] + '.jpg' + '\n'
+    name = total_png[i][:-4]+ '\n'
     ftrain.write(name)
 
 
 for i in val:
-    name = './images/' + total_png[i][:-4] + '.jpg' + '\n'
+    name = total_png[i][:-4] + '\n'
     fval.write(name)
 
 
 for i in list:
-    name = './images/' + total_png[i][:-4] + '.jpg' + '\n'
+    name = total_png[i][:-4] + '\n'
     ftest.write(name)
 
 ftrain.close()

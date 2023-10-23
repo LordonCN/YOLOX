@@ -10,6 +10,9 @@ from loguru import logger
 import torch
 import torch.backends.cudnn as cudnn
 
+import sys
+sys.path.append(sys.path[0].split('/tools')[0])
+
 from yolox.core import launch
 from yolox.exp import Exp, check_exp_value, get_exp
 from yolox.utils import configure_module, configure_nccl, configure_omp, get_num_devices
