@@ -8,6 +8,9 @@ from loguru import logger
 
 import torch
 
+import sys
+sys.path.append(sys.path[0].split('/tools')[0])
+
 from yolox.exp import get_exp
 
 

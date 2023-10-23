@@ -94,16 +94,21 @@ python3 tools/train.py -f exps/example/yolox_voc/yolox_voc_s.py -d 0 -b 16 -c /p
 * --cache: caching imgs into RAM to accelarate training, which need large system RAM.
 * -c: checkpoint file path
 
---------------------
+<details>
+<summary>Export</summary>
 
+We support batch testing for fast evaluation:
 
-When using -f, the above commands are equivalent to:
 ```shell
-python -m yolox.tools.train -f exps/default/yolox_s.py -d 8 -b 64 --fp16 -o [--cache]
-                               exps/default/yolox_m.py
-                               exps/default/yolox_l.py
-                               exps/default/yolox_x.py
+python tools/export_onnx.py --input data -n yolox-s -c YOLOX_outputs/yolox_voc_s/latest_ckpt.pth  --output-name yolox.onnx
+
 ```
+* --input: onnx model input blob name.
+* -c: path of model.
+* --output-name: the file name of covert model
+
+</details>
+
 
 **Multi Machine Training**
 

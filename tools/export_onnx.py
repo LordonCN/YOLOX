@@ -9,6 +9,9 @@ from loguru import logger
 import torch
 from torch import nn
 
+import sys
+sys.path.append(sys.path[0].split('/tools')[0])
+
 from yolox.exp import get_exp
 from yolox.models.network_blocks import SiLU
 from yolox.utils import replace_module
@@ -88,8 +91,8 @@ def main():
     logger.info("loading checkpoint done.")
     dummy_input = torch.randn(1, 3, exp.test_size[0], exp.test_size[1])
     
-    output = model(dummy_input)[0]
-    print(output[0][0][5])
+    # output = model(dummy_input)[0]
+    # print(output[0][0][5])
     
     torch.onnx._export(
         model,
@@ -107,8 +110,8 @@ def main():
     import onnxruntime as ort
     session = ort.InferenceSession(args.output_name, providers=['CUDAExecutionProvider'])
     dummy_input = dummy_input.cpu().numpy().astype(numpy.float32)
-    new_outputs = session.run(None,{'data':dummy_input})[0]
-    print(new_outputs[0][0][5])
+    # new_outputs = session.run(None,{'data':dummy_input})[0]
+    # print(new_outputs[0][0][5])
 
 
     if not args.no_onnxsim:
