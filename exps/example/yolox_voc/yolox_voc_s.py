@@ -8,7 +8,7 @@ from yolox.exp import Exp as MyExp
 class Exp(MyExp):
     def __init__(self):
         super(Exp, self).__init__()
-        self.num_classes = 8
+        self.num_classes = 8  # TODO: KITTI class is 6
         self.depth = 0.33
         self.width = 0.50
         self.warmup_epochs = 1
@@ -25,7 +25,7 @@ class Exp(MyExp):
         from yolox.data import VOCDetection, TrainTransform
 
         return VOCDetection(
-            data_dir=os.path.join(get_yolox_datadir(), "CUSTOMER"),
+            data_dir=os.path.join(get_yolox_datadir(), "CUSTOMER"),  # TODO: CUSTOMER to KITTI
             image_sets=[('train')],
             img_size=self.input_size,
             preproc=TrainTransform(
@@ -41,7 +41,7 @@ class Exp(MyExp):
         legacy = kwargs.get("legacy", False)
 
         return VOCDetection(
-            data_dir=os.path.join(get_yolox_datadir(), "CUSTOMER"),
+            data_dir=os.path.join(get_yolox_datadir(), "CUSTOMER"),  # TODO: CUSTOMER to KITTI
             image_sets=[('test')],
             img_size=self.test_size,
             preproc=ValTransform(legacy=legacy),

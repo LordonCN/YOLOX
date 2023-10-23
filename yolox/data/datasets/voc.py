@@ -115,8 +115,8 @@ class VOCDetection(CacheDataset):
         self.preproc = preproc
         self.target_transform = target_transform
         self.name = dataset_name
-        self._annopath = os.path.join("%s", "Annotations", "%s.xml")
-        self._imgpath = os.path.join("%s", "JPEGImages", "%s.jpg")
+        self._annopath = os.path.join("%s", "annotations", "%s.xml")
+        self._imgpath = os.path.join("%s", "JPEGImages", "%s.jpg")  # TODO: change to png
         self._classes = VOC_CLASSES
         self.cats = [
             {"id": idx, "name": val} for idx, val in enumerate(VOC_CLASSES)
@@ -280,7 +280,7 @@ class VOCDetection(CacheDataset):
         # rootpath = os.path.join(self.root, "VOC" + self._year)
         rootpath = self.root
         name = self.image_set[0]
-        annopath = os.path.join(rootpath, "Annotations", "{:s}.xml")
+        annopath = os.path.join(rootpath, "annotations", "{:s}.xml")
         imagesetfile = os.path.join(rootpath, "ImageSets", name + ".txt")
         cachedir = os.path.join(
             self.root, "annotations_cache", "VOC" + self._year, name

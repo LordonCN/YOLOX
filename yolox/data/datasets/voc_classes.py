@@ -4,21 +4,21 @@
 
 # VOC_CLASSES = ( '__background__', # always index 0
 VOC_CLASSES = (
-    # for KITTI
-    # "Car", 
-    # "Cyclist", 
-    # "Truck", 
-    # "Van", 
-    # "Pedestrian", 
+    # # for KITTI
+    # "Car",
+    # "Cyclist",
+    # "Truck",
+    # "Van",
+    # "Pedestrian",
     # "Tram",
-    
+
     # for L4
-    "Car", 
-    "Truck", 
-    "Van", 
-    "Bus", 
-    "Pedestrian", 
-    "Cyclist", 
+    "Car",
+    "Truck",
+    "Van",
+    "Bus",
+    "Pedestrian",
+    "Cyclist",
     "TrafficCone",
     "Unknown",
 )
